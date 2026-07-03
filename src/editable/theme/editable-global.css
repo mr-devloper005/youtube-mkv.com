@@ -1,46 +1,32 @@
-/*
-  Editable global theme layer.
-
-  Safe for UI editors / AI tools:
-  - Full site background
-  - Global text color
-  - Editable-only typography
-  - Selection color
-  - Scrollbar feel
-  - Article body typography accents
-
-  Do not add data fetching, scripts, or route logic here.
-*/
-
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
-
-/* Per-task display + body typefaces (consumed via task-themes.ts). */
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&family=Syne:wght@500;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap');
 
 body {
-  background-color: var(--slot4-page-bg) !important;
+  background-color: #091413 !important;
   color: var(--slot4-page-text) !important;
-  background-image: var(--slot4-body-gradient) !important;
+  background-image:
+    radial-gradient(circle at top left, rgba(176, 228, 204, 0.14), transparent 24%),
+    radial-gradient(circle at 88% 12%, rgba(64, 138, 113, 0.2), transparent 18%),
+    linear-gradient(180deg, #0b1716 0%, #091413 44%, #081111 100%) !important;
 }
 
 .editable-site-root {
-  /* Yelp-style clean sans, used for both display and body. */
-  --editable-font-display: 'Inter', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
-  --editable-font-body: 'Inter', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
-  /* Premium easing curve used across every hover + transition. */
+  --editable-font-display: 'Outfit', 'Manrope', system-ui, sans-serif;
+  --editable-font-body: 'Manrope', system-ui, sans-serif;
   --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+  --site-dark: #091413;
+  --site-dark-2: #0f201d;
+  --site-panel: rgba(13, 28, 26, 0.86);
+  --site-panel-strong: #112622;
+  --site-line: rgba(176, 228, 204, 0.16);
+  --site-soft: rgba(176, 228, 204, 0.08);
+  --site-accent: #408a71;
+  --site-accent-2: #285a48;
+  --site-mint: #b0e4cc;
+  --site-ice: #e7f6f0;
+  --site-shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
   font-family: var(--editable-font-body);
 }
 
-/*
-  Site-wide premium motion.
-
-  1. Unify the easing of every existing transition/hover to one refined curve.
-  2. Add a smooth "post open" entry animation that replays on each navigation
-     (driven by EditablePageMotion remounting the content per route).
-  Durations stay defined per-component via Tailwind utilities.
-*/
 .editable-site-root *,
 .editable-site-root *::before,
 .editable-site-root *::after {
@@ -50,7 +36,7 @@ body {
 @keyframes editable-enter {
   from {
     opacity: 0;
-    transform: translate3d(0, 22px, 0);
+    transform: translate3d(0, 18px, 0);
   }
   to {
     opacity: 1;
@@ -58,23 +44,9 @@ body {
   }
 }
 
-/* The content region rises + fades on open; `backwards` clears the transform
-   afterwards so sticky sidebars keep working. */
 .editable-enter > * {
-  animation: editable-enter 0.6s var(--ease-premium) backwards;
+  animation: editable-enter 0.55s var(--ease-premium) backwards;
   will-change: transform, opacity;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .editable-enter > * {
-    animation: none;
-  }
-  .editable-site-root *,
-  .editable-site-root *::before,
-  .editable-site-root *::after {
-    transition-duration: 0.001ms !important;
-    animation-duration: 0.001ms !important;
-  }
 }
 
 .editable-site-root h1,
@@ -83,7 +55,7 @@ body {
 .editable-site-root h4,
 .editable-display {
   font-family: var(--editable-font-display);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
 }
 
 .editable-site-root p,
@@ -97,27 +69,137 @@ body {
 }
 
 ::selection {
-  background: color-mix(in oklab, var(--slot4-accent-fill) 28%, transparent);
-  color: var(--slot4-page-text);
+  background: rgba(64, 138, 113, 0.3);
+  color: #f4fffb;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: color-mix(in oklab, var(--slot4-page-bg) 88%, black);
+  background: #081111;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: color-mix(in oklab, var(--slot4-accent) 45%, transparent);
+  background: linear-gradient(180deg, #285a48 0%, #408a71 100%);
   border-radius: 999px;
+  border: 2px solid #081111;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: color-mix(in oklab, var(--slot4-accent) 68%, transparent);
+  background: linear-gradient(180deg, #3f9074 0%, #62b396 100%);
 }
 
-.article-content h2 {
-  color: var(--slot4-accent);
+.site-shell-bg {
+  position: relative;
+  overflow: clip;
+}
+
+.site-shell-bg::before,
+.site-shell-bg::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.site-shell-bg::before {
+  inset: 0 auto auto -14rem;
+  width: 30rem;
+  height: 30rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(176, 228, 204, 0.2) 0%, rgba(176, 228, 204, 0) 70%);
+}
+
+.site-shell-bg::after {
+  right: -12rem;
+  top: 18rem;
+  width: 28rem;
+  height: 28rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(64, 138, 113, 0.18) 0%, rgba(64, 138, 113, 0) 72%);
+}
+
+.site-layer {
+  position: relative;
+  z-index: 1;
+}
+
+.premium-card {
+  border: 1px solid var(--site-line);
+  background: linear-gradient(180deg, rgba(16, 35, 32, 0.94), rgba(11, 23, 22, 0.9));
+  box-shadow: var(--site-shadow);
+  backdrop-filter: blur(18px);
+}
+
+.premium-soft-card {
+  border: 1px solid rgba(176, 228, 204, 0.12);
+  background: linear-gradient(180deg, rgba(18, 38, 34, 0.72), rgba(12, 27, 24, 0.68));
+  backdrop-filter: blur(14px);
+}
+
+.premium-grid {
+  background-image:
+    linear-gradient(rgba(176, 228, 204, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(176, 228, 204, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.premium-ring {
+  position: absolute;
+  border-radius: 999px;
+  border: 1px solid rgba(176, 228, 204, 0.4);
+}
+
+.premium-button {
+  background: linear-gradient(135deg, #408a71 0%, #285a48 100%);
+  color: #f5fffb;
+  box-shadow: 0 12px 30px rgba(40, 90, 72, 0.35);
+}
+
+.premium-button-secondary {
+  background: rgba(176, 228, 204, 0.06);
+  border: 1px solid rgba(176, 228, 204, 0.18);
+  color: #e7f6f0;
+}
+
+.article-content h2,
+.article-content h3 {
+  margin-top: 1.9em;
+  margin-bottom: 0.65em;
+  color: #e7f6f0;
+  font-family: var(--editable-font-display);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.article-content p,
+.article-content li {
+  color: rgba(231, 246, 240, 0.82);
 }
 
 .article-content a {
-  color: var(--slot4-accent-fill);
+  color: #b0e4cc;
+  text-decoration: underline;
+  text-decoration-color: rgba(176, 228, 204, 0.4);
+  text-underline-offset: 0.18em;
+}
+
+.article-content ul,
+.article-content ol {
+  padding-left: 1.2rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .editable-enter > * {
+    animation: none;
+  }
+
+  .editable-site-root *,
+  .editable-site-root *::before,
+  .editable-site-root *::after {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+  }
 }
