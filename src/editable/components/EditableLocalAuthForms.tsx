@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { LockKeyhole, Mail, User2 } from 'lucide-react'
 import { pagesContent } from '@/editable/content/pages.content'
 
 const USERS_KEY = 'slot4:local-auth-users'
@@ -31,8 +32,38 @@ const saveSession = (user: Pick<LocalUser, 'name' | 'email'>) => {
   window.dispatchEvent(new Event('slot4-auth-change'))
 }
 
-const inputClass = 'h-12 w-full rounded-lg border border-[var(--editable-border)] bg-[var(--slot4-surface-bg)] px-4 text-sm font-medium text-[var(--slot4-page-text)] outline-none transition placeholder:text-[var(--slot4-muted-text)] focus:border-[var(--slot4-accent)]'
-const buttonClass = 'inline-flex h-12 w-full items-center justify-center rounded-lg bg-[var(--slot4-accent)] px-6 text-sm font-bold text-[var(--slot4-on-accent)] transition hover:brightness-95 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60'
+const fieldShell = 'flex items-center gap-3 rounded-full border border-[rgba(176,228,204,0.12)] bg-[rgba(9,20,19,0.55)] px-4'
+const inputClass = 'h-12 w-full bg-transparent text-sm text-[#eefbf6] outline-none placeholder:text-[rgba(231,246,240,0.35)]'
+const buttonClass = 'inline-flex h-12 w-full items-center justify-center rounded-full bg-[linear-gradient(135deg,#408A71_0%,#285A48_100%)] px-6 text-sm font-semibold text-[#f5fffb] shadow-[0_18px_38px_rgba(40,90,72,0.35)] transition hover:opacity-95 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60'
+
+function Field({
+  icon: Icon,
+  ...props
+}: React.InputHTMLAttributes<HTMLInputElement> & {
+  icon: typeof Mail
+}) {
+  return (
+    <label className={fieldShell}>
+      <Icon className="h-4 w-4 shrink-0 text-[#b0e4cc]" />
+      <input className={inputClass} {...props} />
+    </label>
+  )
+}
+
+function Message({ status, message }: { status: 'idle' | 'success' | 'error'; message: string | null }) {
+  if (!message) return null
+  return (
+    <p
+      className={`rounded-[1.2rem] px-4 py-3 text-sm font-semibold ${
+        status === 'success'
+          ? 'bg-emerald-950/40 text-emerald-300'
+          : 'bg-[rgba(64,138,113,0.12)] text-[#b0e4cc]'
+      }`}
+    >
+      {message}
+    </p>
+  )
+}
 
 export function EditableLocalLoginForm() {
   const router = useRouter()
@@ -58,9 +89,23 @@ export function EditableLocalLoginForm() {
 
   return (
     <form className="mt-6 grid gap-4" onSubmit={submit}>
-      <input className={inputClass} type="email" placeholder="Email address" value={email} onChange={(event) => setEmail(event.target.value)} required />
-      <input className={inputClass} type="password" placeholder="Password" value={password} onChange={(event) => setPassword(event.target.value)} required />
-      {message ? <p className={`rounded-lg px-4 py-3 text-sm font-semibold ${status === 'success' ? 'bg-emerald-50 text-emerald-700' : 'bg-[var(--slot4-accent-soft)] text-[var(--slot4-accent)]'}`}>{message}</p> : null}
+      <Field
+        icon={Mail}
+        type="email"
+        placeholder="Email address"
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+        required
+      />
+      <Field
+        icon={LockKeyhole}
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(event) => setPassword(event.target.value)}
+        required
+      />
+      <Message status={status} message={message} />
       <button type="submit" className={buttonClass}>{pagesContent.auth.login.submitLabel}</button>
     </form>
   )
@@ -99,10 +144,30 @@ export function EditableLocalSignupForm() {
 
   return (
     <form className="mt-6 grid gap-4" onSubmit={submit}>
-      <input className={inputClass} placeholder="Full name" value={name} onChange={(event) => setName(event.target.value)} required />
-      <input className={inputClass} type="email" placeholder="Email address" value={email} onChange={(event) => setEmail(event.target.value)} required />
-      <input className={inputClass} type="password" placeholder="Password" value={password} onChange={(event) => setPassword(event.target.value)} required />
-      {message ? <p className={`rounded-lg px-4 py-3 text-sm font-semibold ${status === 'success' ? 'bg-emerald-50 text-emerald-700' : 'bg-[var(--slot4-accent-soft)] text-[var(--slot4-accent)]'}`}>{message}</p> : null}
+      <Field
+        icon={User2}
+        placeholder="Full name"
+        value={name}
+        onChange={(event) => setName(event.target.value)}
+        required
+      />
+      <Field
+        icon={Mail}
+        type="email"
+        placeholder="Email address"
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+        required
+      />
+      <Field
+        icon={LockKeyhole}
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(event) => setPassword(event.target.value)}
+        required
+      />
+      <Message status={status} message={message} />
       <button type="submit" className={buttonClass}>{pagesContent.auth.signup.submitLabel}</button>
     </form>
   )
